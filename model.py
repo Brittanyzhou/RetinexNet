@@ -3,15 +3,16 @@ from __future__ import print_function
 import os
 import time
 import random
-
 from PIL import Image
 import tensorflow as tf
 import numpy as np
 
 from utils import *
 
+
 def concat(layers):
     return tf.concat(layers, axis=3)
+
 
 def DecomNet(input_im, layer_num, channel=64, kernel_size=3):
     input_max = tf.reduce_max(input_im, axis=3, keepdims=True)
@@ -26,6 +27,7 @@ def DecomNet(input_im, layer_num, channel=64, kernel_size=3):
     L = tf.sigmoid(conv[:,:,:,3:4])
 
     return R, L
+
 
 def RelightNet(input_L, input_R, channel=64, kernel_size=3):
     input_im = concat([input_R, input_L])
@@ -48,6 +50,7 @@ def RelightNet(input_L, input_R, channel=64, kernel_size=3):
         feature_fusion = tf.layers.conv2d(feature_gather, channel, 1, padding='same', activation=None)
         output = tf.layers.conv2d(feature_fusion, 1, 3, padding='same', activation=None)
     return output
+
 
 class lowlight_enhance(object):
     def __init__(self, sess):
